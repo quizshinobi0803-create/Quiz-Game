@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Shinobi</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+  <!-- 🧭 PWA & Mobile Optimization -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#007bff">
+  <link rel="icon" href="logo.png" type="image/png">
+</head>
+<body>
+
+  <!-- 🏠 Page d'accueil -->
+  <section id="homePage">
+    <div id="welcome" class="welcome-text" onclick="openModal()">Bienvenue dans Quiz Shinobi</div>
+    <div class="form-wrapper">
+      <!-- Le contenu est injecté dynamiquement par checkReturningPlayer() -->
+    </div>
+  </section>
+
+  <!-- 🎮 Page quiz -->
+  <section id="quizPage" style="display: none;">
+    <header class="top-bar">
+      <div class="title-left">Quiz Shinobi</div>
+      <div class="icons-right">
+        <button class="styled-icon" type="button" onclick="toggleSound()"><span class="shine"></span> 🔊</button>
+        <button class="styled-icon" type="button" onclick="openAboutModal()"><span class="shine"></span> ℹ️</button>
+        <button class="styled-icon" type="button" onclick="goToScorePage()"><span class="shine"></span> 🏆</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="stats-wrapper">
+        <div class="stat-block-group">
+          <div class="stat-item">
+            <span class="shine"></span>
+            <div class="stat-icon">🎯</div>
+            <div class="stat-label">Score</div>
+            <div class="stat-separator-horizontal"></div>
+            <div class="stat-value" id="scoreDisplay">0</div>
+          </div>
+          <div class="stat-separator-vertical"></div>
+          <div class="stat-item">
+            <span class="shine"></span>
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-label">Temps</div>
+            <div class="stat-separator-horizontal"></div>
+            <div class="stat-value" id="timer">
+              <span class="time-core">00:15</span> <span class="unit">s</span>
+              &nbsp;&nbsp;
+              <span class="time-core">00</span>
+            </div>
+          </div>
+          <div class="stat-separator-vertical"></div>
+          <div class="stat-item">
+            <span class="shine"></span>
+            <div class="stat-icon">📈</div>
+            <div class="stat-label">Record</div>
+            <div class="stat-separator-horizontal"></div>
+            <div class="stat-value" id="record">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge-display" id="badgeDisplay"></div>
+      <div class="progress-indicator" id="progressIndicator"></div>
+      <div class="question-box fade-in" id="question"><span class="shine"></span></div>
+      <div class="answer-group" id="answerGroup"></div>
+      <div id="resultMessage" class="result-message"></div>
+
+      <button class="validate-btn" type="button" onclick="validateAnswer()"><span class="shine"></span> VALIDER</button>
+      <button class="validate-btn next-btn" type="button" onclick="nextQuestion()" style="display:none;"><span class="shine"></span> SUIVANT</button>
+      <button class="validate-btn replay-btn" type="button" onclick="restartQuiz()" style="display:none;"><span class="shine"></span> REJOUER</button>
+    </main>
+  </section>
+
+  <!-- 🏆 Page des scores -->
+  <section id="scorePage" style="display: none;">
+    <header class="top-bar">
+      <button class="styled-icon" type="button" onclick="returnToQuiz()"><span class="shine"></span> 🔙</button>
+      <div class="title-left">Liste de Meilleur score</div>
+      <button class="styled-icon" type="button" onclick="exportScores()"><span class="shine"></span> 📤 Exporter</button>
+    </header>
+
+    <main class="container">
+      <h3>🏆 Meilleurs scores</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Rang</th>
+            <th>Identifiant</th>
+            <th>Meilleur score</th>
+            <th>Badge</th>
+          </tr>
+        </thead>
+        <tbody id="scoreBody"></tbody>
+      </table>
+    </main>
+  </section>
+
+  <!-- ℹ️ Modale À propos -->
+  <div id="aboutModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAboutModal()">&times;</span>
+      <h2>À propos du Quiz Shinobi</h2>
+      <p><strong>Quiz Shinobi</strong> est un jeu de réflexion inspiré de l’univers ninja dans les mangas "Naruto, Naruto Shippuden, et Boruto & Naruto: Next generation". Teste ta mémoire, ta rapidité et ta maîtrise des techniques secrètes pour devenir un véritable shinobi !</p>
+      <p>Chaque question te rapproche du rang supérieur. Relève le défi, gagne des badges, et bats ton propre record !</p>
+      <p>Créé avec passion pour les fans de mangas Shinobi 🥰🥰🥰, ce quiz est optimisé pour une expérience mobile fluide, accessible, et une façon de prouver que tu es un vrai fan de "Naruto, Naruto Shippuden, et Boruto: Next Generation" 😊😁😎.</p>
+      <p>Amusez-vous bien. 😀😄🙏🙏🙏</p>
+      <p><strong>Cordialement</strong>,</p>
+      <p>💖💖💖</p>
+    </div>
+  </div>
+
+  <!-- 🎵 Lecteur audio invisible -->
+  <audio id="quizMusic" src="" preload="auto"></audio>
+
+  <!-- ⚙️ Enregistrement du Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('✅ Service Worker enregistré'))
+        .catch(err => console.error('❌ Erreur Service Worker', err));
+    }
+  </script>
+
+</body>
+</html>
